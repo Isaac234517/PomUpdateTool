@@ -13,10 +13,12 @@ namespace Handlers
     {
         public List<String> fileList;
         public List<String> propertiesList;
+        public String updateDigit;
         public Processor()
         {
             fileList = new List<String>();
             propertiesList = new List<String>();
+            updateDigit = "";
         }
 
         public void OpenFile(object sender, System.EventArgs e)
@@ -35,7 +37,7 @@ namespace Handlers
             }
         }
 
-        public void ApplyTargetVersion(String version, String updateDigit)
+        public void ApplyTargetVersion(String version)
         {
             foreach (String fileName in fileList)
             {
@@ -53,11 +55,26 @@ namespace Handlers
                 }
                 if(hasChange == true)
                 {
-                    if(updateDigit!=null || updateDigit != String.Empty)
+                    String newFileName = fileName;
+                    if (updateDigit != String.Empty)
                     {
-
+                        String newVersion = updateSelfVersion(xmlDoc, updateDigit);
+                        if (fileName.LastIndexOf('.') >0 && fileName.Substring(fileName.LastIndexOf('.')+1) == "pom"){
+                            String artifactID = "";
+                            foreach(XmlNode node in root.ChildNodes)
+                            {
+                                if(node.Name == "artifactId")
+                                {
+                                    artifactID = node.InnerText;
+                                } 
+                            }
+                            String newName = artifactID + "-" + newVersion;
+                            newFileName = fileName.Substring(0, fileName.LastIndexOf('\\') + 1) + newName + ".pom";
+                        }
+                        
+                        
                     }
-                    xmlDoc.Save(fileName);
+                    xmlDoc.Save(newFileName);
                 }
             }
         }
@@ -104,6 +121,62 @@ namespace Handlers
                 }
             }
             return change;
+        }
+
+        private String updateSelfVersion(XmlDocument xmlDoc, String updateDigit)
+        {
+            XmlNode root = xmlDoc.LastChild;
+            String[] versionDigit = new String[3];
+            String[] versionName = new String[2];
+            String version = "";
+            foreach (XmlNode node in root.ChildNodes)
+            {
+                if(node.Name == "version")
+                {
+                    version = node.InnerText;
+                    // version[0]=xx.xx.xx version[1]= null or snapshot
+                    versionName = version.Split('-');
+                    versionDigit = versionName[0].Split('.');
+                    switch (updateDigit)
+                    {
+                        case "first":
+                            UpdateDigit(versionDigit, 0);
+                            break;
+                        case "middle":
+                            UpdateDigit(versionDigit, 1);
+                            break;
+                        case "last":
+                            UpdateDigit(versionDigit, 2);
+                            break;
+                    }
+                    version = versionName.Length > 1 ? String.Join(".", versionDigit) + "-" + versionName[1] : String.Join(".", versionDigit);
+                    node.InnerText = version;
+                    break;
+                }
+            }
+            return version;
+        }
+
+        private void UpdateDigit(String[] versionDigit, int index)
+        {
+           if ( index !=0 && int.Parse(versionDigit[index]) >= 99)
+           {
+               UpdateDigit(versionDigit, index - 1);
+           }
+           else
+           {
+               versionDigit[index] = (int.Parse(versionDigit[index]) + 1).ToString();
+                for(int i = index+1; i<versionDigit.Length; i++)
+                {
+                    versionDigit[i] = "0";
+                }
+           }
+        }
+
+        public void clearSelectVersion()
+        {
+            updateDigit = "";
+            propertiesList.Clear();
         }
     }
 }

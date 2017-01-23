@@ -39,6 +39,8 @@
             this.last = new System.Windows.Forms.RadioButton();
             this.middle = new System.Windows.Forms.RadioButton();
             this.first = new System.Windows.Forms.RadioButton();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button4 = new System.Windows.Forms.Button();
             this.UpdateVersionGroup.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,7 +76,7 @@
             // button1
             // 
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.button1.Location = new System.Drawing.Point(552, 259);
+            this.button1.Location = new System.Drawing.Point(552, 405);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(106, 29);
             this.button1.TabIndex = 3;
@@ -89,18 +91,18 @@
             this.FileListsArea.HorizontalScrollbar = true;
             this.FileListsArea.Location = new System.Drawing.Point(12, 219);
             this.FileListsArea.Name = "FileListsArea";
-            this.FileListsArea.SelectionMode = System.Windows.Forms.SelectionMode.None;
+            this.FileListsArea.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
             this.FileListsArea.Size = new System.Drawing.Size(497, 225);
             this.FileListsArea.TabIndex = 4;
             // 
             // button2
             // 
             this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)), true);
-            this.button2.Location = new System.Drawing.Point(552, 330);
+            this.button2.Location = new System.Drawing.Point(552, 233);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(106, 30);
             this.button2.TabIndex = 5;
-            this.button2.Text = "Clear";
+            this.button2.Text = "Clear File";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.Clear_Click);
             // 
@@ -111,7 +113,8 @@
             this.properties.Items.AddRange(new object[] {
             "parent",
             "slotcoreVersion",
-            "jackpotVersion"});
+            "jackpotVersion",
+            "basecoreVer"});
             this.properties.Location = new System.Drawing.Point(12, 102);
             this.properties.Name = "properties";
             this.properties.Size = new System.Drawing.Size(243, 94);
@@ -167,12 +170,36 @@
             this.first.UseVisualStyleBackColor = true;
             this.first.CheckedChanged += new System.EventHandler(this.selfVersion_CheckedChanged);
             // 
+            // button3
+            // 
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)), true);
+            this.button3.Location = new System.Drawing.Point(552, 284);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(106, 42);
+            this.button3.TabIndex = 11;
+            this.button3.Text = "Clear Version";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.ClearAllSelection);
+            // 
+            // button4
+            // 
+            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)), true);
+            this.button4.Location = new System.Drawing.Point(552, 345);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(106, 36);
+            this.button4.TabIndex = 12;
+            this.button4.Text = "Del Item";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.DelItem);
+            // 
             // PomUpdate
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 11F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.ClientSize = new System.Drawing.Size(714, 483);
+            this.Controls.Add(this.button4);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.UpdateVersionGroup);
             this.Controls.Add(this.properties);
             this.Controls.Add(this.button2);
@@ -204,6 +231,8 @@
         private System.Windows.Forms.RadioButton last;
         private System.Windows.Forms.RadioButton middle;
         private System.Windows.Forms.RadioButton first;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }
 

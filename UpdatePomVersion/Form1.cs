@@ -14,9 +14,6 @@ namespace UpdatePomVersion
     public partial class PomUpdate : Form
     {
         public Processor processor;
-        private List<String> propertiesList;
-        private String updateDigit;
-
         public enum selfVersion{
             last,middle,first
         };
@@ -31,9 +28,9 @@ namespace UpdatePomVersion
         {
             processor.OpenFile(sender, e);
             FileListsArea.Items.Clear();
-            foreach (string fileName in processor.fileList)
+            foreach (string filename in processor.fileList)
             {
-                FileListsArea.Items.Add(fileName);
+                FileListsArea.Items.Add(filename);
             }
         }
 
@@ -68,7 +65,7 @@ namespace UpdatePomVersion
                 return;
             }
 
-            processor.ApplyTargetVersion(TargetVersion.Text, updateDigit);
+            processor.ApplyTargetVersion(TargetVersion.Text);
         }
 
         private void selfVersion_CheckedChanged(object sender, EventArgs e)
@@ -95,11 +92,11 @@ namespace UpdatePomVersion
         {
             if(choose == true)
             {
-                updateDigit = name;
+                processor.updateDigit = name;
             }
             else
             {
-                updateDigit = "";
+                processor.updateDigit = "";
             }
         }
 
@@ -109,6 +106,28 @@ namespace UpdatePomVersion
             foreach (Object checkedItem in properties.CheckedItems)
             {
                 processor.propertiesList.Add(checkedItem.ToString());
+            }
+        }
+
+        private void ClearAllSelection(object sender, EventArgs e)
+        {
+            first.Checked = false;
+            middle.Checked = false;
+            last.Checked = false;
+            for(int i = 0; i < properties.Items.Count; i++)
+            {
+                properties.SetItemChecked(i, false);
+            }
+            processor.clearSelectVersion();
+        }
+
+        private void DelItem(object sender, EventArgs e)
+        {
+           while (FileListsArea.SelectedIndices.Count > 0)
+            {
+                int i = FileListsArea.SelectedIndices[0];
+                FileListsArea.Items.RemoveAt(i);
+                processor.fileList.RemoveAt(i);
             }
         }
     }
